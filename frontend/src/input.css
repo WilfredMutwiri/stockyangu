@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.navLink{
+    @apply mt-0 md:mt-3
+}
