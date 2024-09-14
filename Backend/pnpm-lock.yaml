@@ -18,6 +18,9 @@ importers:
         specifier: ^4.21.0
         version: 4.21.0
     devDependencies:
+      '@tsconfig/strictest':
+        specifier: ^2.0.5
+        version: 2.0.5
       '@types/cors':
         specifier: ^2.8.17
         version: 2.8.17
@@ -58,6 +61,9 @@ packages:
 
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
+
+  '@tsconfig/strictest@2.0.5':
+    resolution: {integrity: sha512-ec4tjL2Rr0pkZ5hww65c+EEPYwxOi4Ryv+0MtjeaSQRJyq322Q27eOQiFbuNgw2hpL4hB1/W/HBGk3VKS43osg==}
 
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
@@ -601,6 +607,8 @@ snapshots:
   '@tsconfig/node14@1.0.3': {}
 
   '@tsconfig/node16@1.0.4': {}
+
+  '@tsconfig/strictest@2.0.5': {}
 
   '@types/body-parser@1.19.5':
     dependencies:
