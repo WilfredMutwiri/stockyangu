@@ -49,7 +49,10 @@ export default function Home() {
         <main>
           {/* solutions section */}
           <section className='pt-10 pb-10'>
-            <h2 className='font-semibold pl-5 md:pl-10 text-xl'>Solutions</h2>
+            <div className='flex flex-row gap-4 pl-5'>
+              <img className='w-10 h-10 rounded-full' src='https://i.pinimg.com/originals/58/54/cc/5854ccbf23126f8d56c0347624f9f312.gif' alt='solutions Gif'/>
+            <h2 className='font-semibold text-xl pt-2'>Solutions</h2>
+            </div>
             {/* visible on large devices */}
             <div className="hidden md:flex flex-col gap-12 md:flex-row justify-between w-11/12 mx-auto pt-5">
               <div className=' bg-purple-300 mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 shadow-gray-300 relative'>
@@ -124,7 +127,10 @@ export default function Home() {
           <hr />
           {/* reviews section */}
           <section>
-            <h2 className='font-semibold pl-5 md:pl-10 text-xl pt-10'>Latest Reviews</h2>
+            <div className='flex flex-row gap-2 pt-10 pl-5'>
+              <img className='w-10 h-10 rounded-full' src='https://i.pinimg.com/originals/c1/1d/05/c11d05415f5ff082abf5155fa6d98e1f.gif' alt='reviews gif'/>
+              <h2 className='font-semibold text-xl'>Latest Reviews</h2>
+            </div>
             <div className='pt-10 pb-10 hidden md:flex flex-row gap-12 w-11/12 mx-auto '>
               <div className='flex flex-col gap-1 bg-violet-400 p-5 rounded-md shadow-md shadow-gray-300'>
                 <div>
