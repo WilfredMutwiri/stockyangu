@@ -55,8 +55,8 @@ export default function Home() {
             </div>
             {/* visible on large devices */}
             <div className="hidden md:flex flex-col gap-12 md:flex-row justify-between w-11/12 mx-auto pt-5">
-              <div className=' bg-purple-300 mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 shadow-gray-300 relative'>
-                  <div className='p-5 rounded-md w-full md:w-72 h-72 leading-relaxed'>
+              <div className=' bg-gray-50 mx-auto w-full md:w-72 h-72 shadow-sm rounded-sm border-2 shadow-gray-300 relative'>
+                  <div className='p-5 w-full md:w-72 h-72 leading-relaxed'>
                   <h2 className='text-center font-semibold text-lg text-cyan-700 mb-2'>Sales Monitoring</h2>
                     <hr />
                     <p className='pt-4'>
@@ -65,8 +65,8 @@ export default function Home() {
                     <Button className='w-44 mx-auto mt-4' gradientDuoTone="purpleToBlue" outline>Get Started</Button>
                   </div>
               </div>
-              <div  className='mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 inset-1 shadow-gray-300 relative mt-14 md:mt-0'>
-                  <div className=' bg-purple-300 rounded-md  w-full md:w-72  h-72 p-5 leading-relaxed'>
+              <div  className='mx-auto w-full md:w-72 h-72 shadow-sm rounded-md border-2 inset-1 shadow-gray-300 relative mt-14 md:mt-0  bg-gray-50'>
+                  <div className=' rounded-md  w-full md:w-72  h-72 p-5 leading-relaxed'>
                     <h2 className='text-center font-semibold text-lg text-cyan-700 mb-2'>Stock Management</h2>
                     <hr />
                     <p className='pt-4 leading-relaxed p-5'>
@@ -75,8 +75,8 @@ export default function Home() {
                     <Button className='w-44 mx-auto mt-10 md:mt-0' gradientDuoTone="purpleToBlue" outline>Get Started</Button>
                   </div>
               </div>
-              <div className='mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 shadow-gray-300 relative mt-14 md:mt-0'>
-                  <div className=' bg-purple-300 rounded-md w-full md:w-72 h-[300px] md:h-72 p-5 leading-relaxed'>
+              <div className='mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 shadow-gray-300 relative mt-14 md:mt-0  bg-gray-50'>
+                  <div className=' rounded-md w-full md:w-72 h-[300px] md:h-72 p-5 leading-relaxed'>
                     <h2 className='text-center font-semibold text-lg text-cyan-700 mb-2'>Report Generation</h2>
                     <hr />
                     <p className='pt-4 leading-relaxed p-5'>
@@ -89,8 +89,8 @@ export default function Home() {
             {/* visible on small devices */}
             <div className='block md:hidden w-11/12 mx-auto'>
             <Carousel showThumbs={false} infiniteLoop={true} autoPlay={true}>
-            <div className='mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 shadow-gray-300 relative mt-14 md:mt-0'>
-                  <div className=' bg-purple-300 p-5 rounded-md w-full md:w-72 h-72 leading-relaxed'>
+            <div className='mx-auto w-full md:w-72 h-72 shadow-md rounded-sm border-2 shadow-gray-300 relative mt-14 md:mt-0'>
+                  <div className=' bg-gray-50 p-5 rounded-md w-full md:w-72 h-72 leading-relaxed'>
                   <h2 className='text-center font-semibold text-lg text-cyan-700 mb-2'>Sales Monitoring</h2>
                     <hr />
                     <p className='pt-4 leading-relaxed p-5'>
@@ -100,8 +100,8 @@ export default function Home() {
                   </div>
               </div>
 
-              <div  className='mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 shadow-gray-300 relative mt-14 md:mt-0'>
-                  <div className=' bg-purple-300 rounded-md  w-full md:w-72  h-72 p-5 leading-relaxed'>
+              <div  className='mx-auto w-full md:w-72 h-72 shadow-md rounded-sm border-2 shadow-gray-300 relative mt-14 md:mt-0'>
+                  <div className=' bg-gray-50 rounded-md  w-full md:w-72  h-72 p-5 leading-relaxed'>
                     <h2 className='text-center font-semibold text-lg text-cyan-700 mb-2'>Stock Management</h2>
                     <hr />
                     <p className='pt-4 leading-relaxed p-5'>
@@ -111,8 +111,8 @@ export default function Home() {
                   </div>
               </div>
 
-              <div className='mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 shadow-gray-300 relative mt-14 md:mt-0'>
-                  <div className=' bg-purple-300 rounded-md w-full md:w-72 md:h-72 p-5 leading-relaxed'>
+              <div className='mx-auto w-full md:w-72 h-72 shadow-md rounded-sm border-2 shadow-gray-300 relative mt-14 md:mt-0'>
+                  <div className=' bg-gray-50 rounded-md w-full md:w-72 md:h-72 p-5 leading-relaxed'>
                     <h2 className='text-center font-semibold text-lg text-cyan-700 mb-2'>Report Generation</h2>
                     <hr />
                     <p className='pt-4 leading-relaxed p-5'>
@@ -132,7 +132,7 @@ export default function Home() {
               <h2 className='font-semibold text-xl'>Latest Reviews</h2>
             </div>
             <div className='pt-10 pb-10 hidden md:flex flex-row gap-12 w-11/12 mx-auto '>
-              <div className='flex flex-col gap-1 bg-violet-400 p-5 rounded-md shadow-md shadow-gray-300'>
+              <div className='border-2 flex flex-col gap-1 bg-gray-50 p-5 rounded-md shadow-sm shadow-gray-300'>
                 <div>
                 <Rating>
                   <Rating.Star />
@@ -147,10 +147,10 @@ export default function Home() {
                 <p>
                 StockYAngu has completely transformed how I manage my stock and sales. It’s incredibly user-friendly and ensures that I never miss a sale. The real-time monitoring feature helps me stay on top of everything, and I love how smooth the reporting is!
                 </p>
-                <h3 className='text-white'>@Samuel K. <span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
+                <h3 className='text-green-600'>@Samuel K. <span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
                 </div>
               </div>
-              <div className='flex flex-col gap-1 bg-violet-400 p-5 rounded-md shadow-md shadow-gray-300'>
+              <div className='border-2 flex flex-col gap-1 bg-gray-50 p-5 rounded-md shadow-sm shadow-gray-300'>
                 <div>
                 <Rating>
                   <Rating.Star />
@@ -165,10 +165,10 @@ export default function Home() {
                 <p>
                 Managing my inventory used to be stressful, but with StockYAngu, everything is so much easier. The app keeps everything organized and up to date, saving me time and energy. I highly recommend this to anyone in retail!
                 </p>
-                <h3 className='text-white'>@Mary N<span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
+                <h3 className='text-green-600'>@Mary N<span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
                 </div>
               </div>
-              <div className='flex flex-col gap-1 bg-violet-400 p-5 rounded-md shadow-md shadow-gray-300'>
+              <div className='border-2 flex flex-col gap-1 bg-gray-50 p-5 rounded-md shadow-sm shadow-gray-300'>
                 <div>
                 <Rating>
                   <Rating.Star />
@@ -183,14 +183,14 @@ export default function Home() {
                 <p>
                 StockYAngu has made managing my sales and stock a breeze. I can track everything in one place, and the detailed reports give me insights that help grow my business. A must-have for every small business owner!
                 </p>
-                <h3 className='text-white'>@Alex M<span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
+                <h3 className='text-green-600'>@Alex M<span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
                 </div>
               </div>
             </div>
             {/* visible on small devices */}
             <div className='pt-10 pb-10 gap-12 w-11/12 mx-auto block md:hidden'>
-            <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true}>
-            <div className='flex flex-col gap-1 bg-violet-400 p-5 rounded-md shadow-md shadow-gray-300'>
+            <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} className='p-2'>
+            <div className='border-2 flex flex-col gap-1 bg-gray-50 p-5 rounded-md shadow-sm shadow-gray-300'>
                 <div>
                 <Rating>
                   <Rating.Star />
@@ -205,11 +205,11 @@ export default function Home() {
                 <p>
                 StockYAngu has completely transformed how I manage my stock and sales. It’s incredibly user-friendly and ensures that I never miss a sale. The real-time monitoring feature helps me stay on top of everything, and I love how smooth the reporting is!
                 </p>
-                <h3 className='text-white'>@Samuel K. <span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
+                <h3 className='text-green-600'>@Samuel K. <span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
                 </div>
               </div>
 
-              <div className='flex flex-col gap-1 bg-violet-400 p-5 rounded-md shadow-md shadow-gray-300'>
+              <div className='border-2 flex flex-col gap-1 bg-gray-50 p-5 rounded-md shadow-sm shadow-gray-300'>
                 <div>
                 <Rating>
                   <Rating.Star />
@@ -224,11 +224,11 @@ export default function Home() {
                 <p>
                 StockYAngu has made managing my sales and stock a breeze. I can track everything in one place, and the detailed reports give me insights that help grow my business. A must-have for every small business owner!
                 </p>
-                <h3 className='text-white'>@Alex M<span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
+                <h3 className='text-green-600'>@Alex M<span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
                 </div>
               </div>
 
-              <div className='flex flex-col gap-1 bg-violet-400 p-5 rounded-md shadow-md shadow-gray-300'>
+              <div className='border-2 flex flex-col gap-1 bg-gray-50 p-5 rounded-md shadow-sm shadow-gray-300'>
                 <div>
                 <Rating>
                   <Rating.Star />
@@ -243,7 +243,7 @@ export default function Home() {
                 <p>
                 StockYAngu has made managing my sales and stock a breeze. I can track everything in one place, and the detailed reports give me insights that help grow my business. A must-have for every small business owner!
                 </p>
-                <h3 className='text-white'>@Alex M<span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
+                <h3 className='text-green-600'>@Alex M<span className='text-red-600 text-sm pl-3'>12/9/2024</span></h3>  
                 </div>
               </div>
 

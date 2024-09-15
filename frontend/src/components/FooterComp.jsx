@@ -4,7 +4,7 @@ import { Footer } from "flowbite-react";
 import logoImg from '../assets/logo.webp'
 export default function FooterComp() {
   return (
-    <div className='border-t-2 border-purple-400 rounded-md '>
+    <div className='border-t-2 border-cyan-600 rounded-md '>
         <Footer container className='bg-slate-100'>
       <div className="w-full text-center">
         <div className="w-full justify-between sm:flex sm:items-center sm:justify-between">
