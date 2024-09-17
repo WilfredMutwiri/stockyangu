@@ -9,6 +9,7 @@ import { Rating } from "flowbite-react";
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Link } from 'react-router-dom';
 export default function Home() {
   const homeBannerImages = [homeImg, homeImg2, homeImg3, homeImg4];
   return (
@@ -40,7 +41,9 @@ export default function Home() {
                 </h2>
                 <h3 className='text-center font-semibold pt-5 text-xl'>Always keeping your business <span className='text-cyan-300'>ON</span></h3>
                 <div className='pt-10'>
-                  <Button gradientDuoTone="purpleToBlue" outline className='mx-auto w-[300px]'>Get Started</Button>
+                  <Link to='/signin'>
+                  <Button gradientDuoTone="purpleToBlue" outline className='mx-auto w-[300px]' >Get Started</Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -62,7 +65,9 @@ export default function Home() {
                     <p className='pt-4'>
                       With Stock Yangu app, you can now keep track of sales in your business, making sure that you keep all transactions in check!
                     </p>
+                    <Link to='/signup'>
                     <Button className='w-44 mx-auto mt-4' gradientDuoTone="purpleToBlue" outline>Get Started</Button>
+                    </Link>
                   </div>
               </div>
               <div  className='mx-auto w-full md:w-72 h-72 shadow-sm rounded-md border-2 inset-1 shadow-gray-300 relative mt-14 md:mt-0  bg-gray-50'>
@@ -72,7 +77,9 @@ export default function Home() {
                     <p className='pt-4 leading-relaxed p-5'>
                       With Stock Yangu app, you can efficiently manage your stock, ensuring that your inventory is always up to date.
                     </p>
-                    <Button className='w-44 mx-auto mt-10 md:mt-0' gradientDuoTone="purpleToBlue" outline>Get Started</Button>
+                    <Link to='/signup'>
+                    <Button className='w-44 mx-auto mt-4' gradientDuoTone="purpleToBlue" outline>Get Started</Button>
+                    </Link>
                   </div>
               </div>
               <div className='mx-auto w-full md:w-72 h-72 shadow-md rounded-md border-2 shadow-gray-300 relative mt-14 md:mt-0  bg-gray-50'>
@@ -82,7 +89,9 @@ export default function Home() {
                     <p className='pt-4 leading-relaxed p-5'>
                       With Stock Yangu app, you can generate comprehensive reports that help you understand your business performance.
                     </p>
-                    <Button className='w-44 mx-auto mt-10 md:mt-0' gradientDuoTone="purpleToBlue" outline>Get Started</Button>
+                    <Link to='/signup'>
+                    <Button className='w-44 mx-auto mt-4 ' gradientDuoTone="purpleToBlue" outline>Get Started</Button>
+                    </Link>
                   </div>
               </div>
             </div>

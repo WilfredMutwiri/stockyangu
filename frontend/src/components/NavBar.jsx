@@ -12,7 +12,7 @@ export function NavComp() {
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
-        <Navbar.Link className="navLink" href="#" active>
+        <Navbar.Link className="navLink" href="/" active>
           Home
         </Navbar.Link>
         <Navbar.Link href="#" className="navLink">About</Navbar.Link>
@@ -20,8 +20,12 @@ export function NavComp() {
         <Navbar.Link href="#" className="navLink">Pricing</Navbar.Link>
         <Navbar.Link href="#" className="navLink">Contact</Navbar.Link>
         <div className="flex gap-4 mx-auto p-4 md:p-0">
+        <Navbar.Link href="/signin">
         <Button gradientDuoTone="purpleToBlue" outline>Login</Button>
+        </Navbar.Link>
+        <Navbar.Link href="/signup">
         <Button gradientDuoTone="pinkToOrange" outline>Register</Button>
+        </Navbar.Link>
       </div>
       </Navbar.Collapse>
     </Navbar>
