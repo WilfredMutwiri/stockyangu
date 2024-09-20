@@ -2,6 +2,7 @@ import React from 'react'
 import logo from '../assets/signup.jpg'
 import { Button, Spinner, TextInput } from 'flowbite-react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom';
 export default function SignUp() {
     const [loading,setLoading]=useState(false);
     const [showPassword,setShowpassword]=useState(false);
@@ -54,7 +55,9 @@ export default function SignUp() {
                 }
             </Button>
             </form>
-            <p className='text-sm text-center'>Already have an account?<a className='text-green-600 pl-1' href='/signin'>Login</a></p>
+            <p className='text-sm text-center'>Already have an account?
+                <Link to='/signin' className='text-green-600 pl-1'>Login</Link>
+            </p>
         </div>
         </div>
     </div>
