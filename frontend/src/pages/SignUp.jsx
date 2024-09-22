@@ -19,7 +19,7 @@ export default function SignUp() {
             <img src={logo} className='mx-auto w-44 md:w-80 h-44 md:h-80' alt='logo Image'/>  
         </div>
         <div className='flex-1 flex flex-col gap-5 pt-5'>
-            <h2 className='font-semibold text-center md:text-left'>Create Your Account!</h2>
+            <h2 className='font-semibold text-xl md:text-base'>Create Your Account!</h2>
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <TextInput
             placeholder='Your Email Address'

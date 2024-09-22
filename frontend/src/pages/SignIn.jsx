@@ -18,7 +18,7 @@ export default function SignIn() {
             <img src={logo} className='mx-auto w-44 md:w-80 h-44 md:h-80' alt='logo Image'/>  
         </div>
         <div className='flex-1 flex flex-col gap-4 pt-5'>
-            <h2 className='font-semibold text-center md:text-left'>Login</h2>
+            <h2 className='font-semibold text-base md:text-xl'>Login</h2>
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <TextInput
             placeholder='Your Email'
