@@ -11,6 +11,7 @@ const app = express();
 app.use(
   cors({
     origin: env.FRONTED_BASE_URL,
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   })
 );
 app.use(bodyParser.json());
