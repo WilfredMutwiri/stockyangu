@@ -126,7 +126,7 @@ userRouter.post(
     res.cookie("token", token, {
       httpOnly: true, // Prevent JavaScript access to the cookie
       secure: true, // Use Secure flag (only send over HTTPS)
-      sameSite: "strict", // Prevent CSRF attacks
+      sameSite: "none", // Prevent CSRF attacks
       maxAge: 24 * 60 * 60 * 1000, // time in milliseconds
     });
 
