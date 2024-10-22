@@ -1,10 +1,18 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+
 import router from "./routes";
+import { env } from "./lib/env";
 
 const app = express();
 
+app.use(
+  cors({
+    origin: env.FRONTED_BASE_URL,
+  })
+);
 app.use(bodyParser.json());
 app.use(cookieParser());
 

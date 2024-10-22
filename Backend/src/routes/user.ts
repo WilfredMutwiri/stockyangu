@@ -1,7 +1,6 @@
 import { Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
 import { UserLoginSchema, UserRegistrationSchema } from "../validation/user";
 import { ApiResponseType } from "../types/api";
 import { User } from "@prisma/client";
@@ -107,7 +106,9 @@ userRouter.post(
       });
     }
     // check if correct password
-    const passwordMatch = bcrypt.compare(password, user.password);
+    const passwordMatch =await bcrypt.compare(password, user.password);
+
+    console.log("passwordMatch", passwordMatch);
 
     if (!passwordMatch) {
       return res.status(401).json({
@@ -158,7 +159,7 @@ userRouter.get(
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "You are no logged in.",
+        message: "Please login to continue. (ERR:0)",
         data: null,
       });
     }
@@ -167,29 +168,30 @@ userRouter.get(
     if (!decoded) {
       return res.status(401).json({
         success: false,
-        message: "Please login to continue.",
+        message: "Please login to continue. (ERR:1)",
         data: null,
       });
     }
 
-   if(typeof decoded === "string") {
-    console.log(decoded, "decoded is a string, unexpected!!!!!");
+    if (typeof decoded === "string") {
+      console.log(decoded, "decoded is a string, unexpected!!!!!");
       return res.status(401).json({
         success: false,
-        message: "Please login to continue.",
+        message: "Please login to continue. (ERR:2)",
         data: null,
       });
     }
 
     console.log(decoded);
 
-    if(!("id" in decoded)) {
+    if (!("id" in decoded)) {
       return res.status(401).json({
         success: false,
-        message: "Please login to continue.",
+        message: "Please login to continue. (ERR:3)",
         data: null,
       });
     }
+
 
     const user = await prisma.user.findUnique({
       where: {
