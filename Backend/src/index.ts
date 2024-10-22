@@ -1,16 +1,16 @@
-import dotenv from 'dotenv';
-import express, { Application, Request, Response } from 'express';
+import express from "express";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import router from "./routes";
 
-//For env File 
-dotenv.config();
+const app = express();
 
-const app: Application = express();
-const port = process.env["PORT"] || 8000;
+app.use(bodyParser.json());
+app.use(cookieParser());
 
-app.get('/', (_: Request, res: Response) => {
-  res.send('Welcome to Express & TypeScript Server');
-});
+app.use("/api", router);
 
-app.listen(port, () => {
-  console.log(`Server is Fire at http://localhost:${port}`);
+const PORT = process.env["PORT"] || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
