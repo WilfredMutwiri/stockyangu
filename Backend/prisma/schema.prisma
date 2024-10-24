@@ -20,6 +20,9 @@ model User {
   password String
   role     UserRole @default(SELLER)
 
+  shop   Shop? @relation(fields: [shopId], references: [id])
+  shopId Int?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -29,4 +32,84 @@ enum UserRole {
 
   SELLER
   MANAGER
+}
+
+model Shop {
+  id       Int          @id @default(autoincrement())
+  name     String
+  phone    String
+  email    String
+  website  String?
+  logoUrl  String?
+  category ShopCategory
+
+  workers  User[]
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id   Int    @id @default(autoincrement())
+  name String
+  imageUrl  String?
+  description String?
+
+  priceHistory Price[]
+  movements    ProductMovement[]
+
+  shop      Shop     @relation(fields: [shopId], references: [id])
+  shopId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Price {
+  id Int @id @default(autoincrement())
+
+  buying  Float
+  selling Float
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  startDate DateTime  @default(now()) // When the price started being in effect
+  endDate   DateTime? // Nullable, tracks when the price stops being in effect
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  productMovement ProductMovement[]
+}
+
+model ProductMovement {
+  id             Int          @id @default(autoincrement())
+  quantity       Int
+
+  priceInEffect  Price @relation(fields: [productPriceId], references: [id])
+  productPriceId Int
+
+  type           MovementType
+  product        Product      @relation(fields: [productId], references: [id])
+  productId      Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+enum MovementType {
+  IN
+  OUT
+}
+
+enum ShopCategory {
+  GROCERY
+  RESTAURANT
+  PHARMACY
+  CLOTHING
+  ELECTRONICS
+  FURNITURE
+  BEAUTY
+  BOOKS
+  SERVICE
+  OTHER
 }
