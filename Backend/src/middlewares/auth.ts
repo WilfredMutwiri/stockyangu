@@ -3,8 +3,13 @@ import jwt from "jsonwebtoken";
 
 import { env } from "../lib/env";
 import prisma from "../lib/prisma";
+import { ApiResponseType } from "../types/api";
 
-async function auth(req: Request, res: Response, next: NextFunction) {
+async function auth(
+  req: Request,
+  res: Response<ApiResponseType<null, null>>,
+  next: NextFunction
+) {
   const token = req.cookies["token"];
   console.log(`inside auth middleware, token: `, token);
   if (!token) {

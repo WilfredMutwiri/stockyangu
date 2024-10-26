@@ -43,12 +43,12 @@ export async function playground() {
   // console.log(`Created requester:`, requester);
 
   // Check if requester is a manager at the shop where the requested user works
-  
+
   const shop = await prisma.shop.findFirst({
-    include:{
-      workers: true
-    }
-  })
+    include: {
+      workers: true,
+    },
+  });
   console.log(`Found shop:`, shop);
   const user = await prisma.user.findFirst({
     where: {
@@ -66,4 +66,3 @@ export async function playground() {
 
   console.log(`Was able to find user:`, user);
 }
-

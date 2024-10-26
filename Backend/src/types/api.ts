@@ -6,7 +6,8 @@ export type ApiResponseType<TData, TError = ZodIssue[]> =
       message: string;
       data: TData;
       pagination?: {
-        items_count: number;
+        returned_count: number;
+        available_count: number;
         pages_count: number;
         current_page: number;
         has_next: boolean;

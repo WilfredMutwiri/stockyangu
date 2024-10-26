@@ -13,7 +13,6 @@ usersRouter.get(
   async (req, res: Response<ApiResponseType<UserWithoutPassword[]>>) => {
     const { limit, page, offset } = req.pagination;
 
-
     // role of the user
     const role = req.user.role;
 
@@ -27,7 +26,8 @@ usersRouter.get(
           current_page: page,
           has_next: false,
           has_prev: false,
-          items_count: 1,
+          available_count: 1,
+          returned_count: 1,
           pages_count: 1,
           links: {
             next: null,
@@ -38,7 +38,6 @@ usersRouter.get(
       });
     }
 
-    
     const urlWithoutQuery = req.originalUrl.split("?")[0];
 
     // if the user is a manager, return all users in the shop
@@ -58,7 +57,6 @@ usersRouter.get(
 
       const [users, count] = await Promise.all([usersPromise, countPromise]);
 
-
       return res.json({
         success: true,
         message: "Succeeded.",
@@ -67,7 +65,8 @@ usersRouter.get(
           current_page: page,
           has_next: offset + limit < count,
           has_prev: offset > 0,
-          items_count: count,
+          available_count: count,
+          returned_count: users.length,
           pages_count: Math.ceil(count / limit),
           links: {
             next:
@@ -102,7 +101,8 @@ usersRouter.get(
           current_page: page,
           has_next: offset + limit < count,
           has_prev: offset > 0,
-          items_count: count,
+          available_count: count,
+          returned_count: users.length,
           pages_count: Math.ceil(count / limit),
           links: {
             next:
@@ -195,9 +195,6 @@ usersRouter.get(
           where: {
             id: requestedUserId,
             shopId: req.user.shopId,
-          },
-          include: {
-            shop: true,
           },
         });
 

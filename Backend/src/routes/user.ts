@@ -159,7 +159,5 @@ userRouter.post("/logout", (_, res: Response<ApiResponseType<null>>) => {
   });
 });
 
-// get user details
-// userRouter.get("/me", playground);
 
 export default userRouter;

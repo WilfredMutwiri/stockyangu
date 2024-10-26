@@ -11,7 +11,11 @@
 
     "strict": true,
 
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    "noEmitOnError": true,
+    "pretty": true
   },
+  "include": ["express.d.ts", "src/**/*.ts"],
   "extends": "@tsconfig/strictest/tsconfig.json"
 }
