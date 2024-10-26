@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -14,7 +15,7 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
+  id       String     @id @default(uuid())
   email    String   @unique
   name     String
   password String
@@ -22,6 +23,8 @@ model User {
 
   shop   Shop? @relation(fields: [shopId], references: [id])
   shopId Int?
+
+  productMovements ProductMovement[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -51,9 +54,9 @@ model Shop {
 }
 
 model Product {
-  id   Int    @id @default(autoincrement())
-  name String
-  imageUrl  String?
+  id          Int     @id @default(autoincrement())
+  name        String
+  imageUrl    String?
   description String?
 
   priceHistory Price[]
@@ -83,17 +86,21 @@ model Price {
 }
 
 model ProductMovement {
-  id             Int          @id @default(autoincrement())
-  quantity       Int
+  id       Int @id @default(autoincrement())
+  quantity Int
 
   priceInEffect  Price @relation(fields: [productPriceId], references: [id])
   productPriceId Int
 
-  type           MovementType
-  product        Product      @relation(fields: [productId], references: [id])
-  productId      Int
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  // who did the movement
+  worker   User @relation(fields: [workerId], references: [id])
+  workerId String
+
+  type      MovementType
+  product   Product      @relation(fields: [productId], references: [id])
+  productId Int
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 enum MovementType {

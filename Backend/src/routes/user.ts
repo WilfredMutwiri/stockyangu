@@ -29,13 +29,22 @@ userRouter.post(
         where: {
           email: validationResult.data.email,
         },
+        select: {
+          id: true,
+        },
       });
 
       if (userExists) {
         return res.status(409).json({
           success: false,
           message: "User with this email already exists.",
-          data: [],
+          data: [
+            {
+              code: "custom",
+              message: "User with this email already exists.",
+              path: ["email"],
+            },
+          ],
         });
       }
       // create user
@@ -52,13 +61,10 @@ userRouter.post(
       });
       // return success message
 
-      // remove password, and return user
-      const { password, ...userWithoutPassword } = user;
-
       return res.json({
         success: true,
         message: "Your account has been created successfully.",
-        data: userWithoutPassword,
+        data: user,
       });
     } catch (error) {
       console.error(error);
@@ -96,6 +102,9 @@ userRouter.post(
       where: {
         email,
       },
+      omit: {
+        password: false,
+      },
     });
 
     if (!user) {
@@ -106,7 +115,7 @@ userRouter.post(
       });
     }
     // check if correct password
-    const passwordMatch =await bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
     console.log("passwordMatch", passwordMatch);
 
@@ -151,71 +160,6 @@ userRouter.post("/logout", (_, res: Response<ApiResponseType<null>>) => {
 });
 
 // get user details
-userRouter.get(
-  "/me",
-  async (req, res: Response<ApiResponseType<Omit<User, "password">, null>>) => {
-    // get user id from token
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "Please login to continue. (ERR:0)",
-        data: null,
-      });
-    }
-
-    const decoded = jwt.verify(token, env.JWT_SECRET);
-    if (!decoded) {
-      return res.status(401).json({
-        success: false,
-        message: "Please login to continue. (ERR:1)",
-        data: null,
-      });
-    }
-
-    if (typeof decoded === "string") {
-      console.log(decoded, "decoded is a string, unexpected!!!!!");
-      return res.status(401).json({
-        success: false,
-        message: "Please login to continue. (ERR:2)",
-        data: null,
-      });
-    }
-
-    console.log(decoded);
-
-    if (!("id" in decoded)) {
-      return res.status(401).json({
-        success: false,
-        message: "Please login to continue. (ERR:3)",
-        data: null,
-      });
-    }
-
-
-    const user = await prisma.user.findUnique({
-      where: {
-        id: decoded["id"],
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "This account no longer exists.",
-        data: null,
-      });
-    }
-
-    // remove password, and return user
-    const { password, ...userWithoutPassword } = user;
-
-    return res.json({
-      success: true,
-      message: "User details fetched successfully.",
-      data: userWithoutPassword,
-    });
-  }
-);
+// userRouter.get("/me", playground);
 
 export default userRouter;

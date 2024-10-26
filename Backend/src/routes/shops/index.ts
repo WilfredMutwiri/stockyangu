@@ -1,15 +1,20 @@
 import { Router } from "express";
+import shopRouter from "./shop";
 
 const shopsRouter = Router();
 
-shopsRouter.get("/", (req, res) => {
-    // we have to make sure the logged in user is an admin and then we can return the list of shops
+// /shops
+shopsRouter.get("/", (_, res) => {
+  // return all shops
+  // pagination can be added
   res.send("Shops route hit...");
 });
 
-shopsRouter.get("/new", (req, res) => {
-    // we have to make sure the logged in user is a shop owner and then we can create a new shop
-    res.send("New Shop creation route hit...");
+shopsRouter.use("/:id", shopRouter);
+
+shopsRouter.post("/new", (_, res) => {
+  // if the user does not already own a shop, we can create a new shop with him as the manager
+  res.send("New shop route hit...");
 });
 
 export default shopsRouter;
