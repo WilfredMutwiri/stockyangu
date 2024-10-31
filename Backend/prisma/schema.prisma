@@ -32,7 +32,6 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
 
 enum UserRole {
@@ -56,13 +55,12 @@ model Shop {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
-  imageUrl    String?
+  imageUrls   String[]
   description String?
 
   priceHistory Price[]
@@ -72,7 +70,6 @@ model Product {
   shopId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
 
 model Price {
@@ -84,7 +81,6 @@ model Price {
   product   Product @relation(fields: [productId], references: [id])
   productId Int
 
-  startDate DateTime  @default(now()) // When the price started being in effect
   endDate   DateTime? // Nullable, tracks when the price stops being in effect
 
   createdAt       DateTime          @default(now())
@@ -141,8 +137,6 @@ model Invite {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-
 }
 
 enum InviteStatus {

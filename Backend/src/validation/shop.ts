@@ -24,9 +24,9 @@ const NewShopSchema = z.object({
 
   logoUrl: z
     .string()
-    .regex(/^https:\/\/utfs\.io\/(?:a\/([^\/]+)\/|f\/)([^\/]+)$/, {
+    .regex(utFileUrlRegex, {
       message:
-        "Invalid logo URL. If you are a developer, omit it or provide a valid URL from our upload endpoint.",
+        "Invalid logo URL. If you are a developer, provide a valid URL from our upload endpoint.",
     })
     .optional(),
 
