@@ -1,8 +1,9 @@
-import { Response, Router } from "express";
-import productRouter from "./product";
 import { Product, UserRole } from "@prisma/client";
-import { ApiResponseType } from "../../types/api";
+import { Request, Response, Router } from "express";
 import prisma from "../../lib/prisma";
+import { ApiResponseType } from "../../types/api";
+import productRouter, { ProductWithPriceHistoryAndMovements } from "./product";
+import { NewProductSchema } from "../../validation/product";
 
 const productsRouter = Router();
 
@@ -90,6 +91,82 @@ productsRouter.get(
         success: false,
         message: "Internal server error. Please retry.",
         data: null,
+      });
+    }
+  }
+);
+
+productRouter.post(
+  "/",
+  async (
+    req: Request,
+    res: Response<ApiResponseType<ProductWithPriceHistoryAndMovements>>
+  ) => {
+    try {
+      const shopId = req.user.shopId;
+
+      if (!shopId) {
+        return res.status(403).json({
+          success: false,
+          message: "There is no shop associated with your account.",
+          data: [],
+        });
+      }
+
+      // user cnnot create a product if he is not a manager
+
+      const role = req.user.role;
+
+      if (role !== UserRole.MANAGER) {
+        return res.status(403).json({
+          success: false,
+          message: "Only managers can create products.",
+          data: [],
+        });
+      }
+
+      // create a new product
+      const validationResult = NewProductSchema.safeParse(req.body);
+
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid data provided.",
+          data: validationResult.error.issues,
+        });
+      }
+
+      const product = await prisma.product.create({
+        data: {
+          name: validationResult.data.name,
+          shopId: shopId,
+          imageUrls: validationResult.data.imageUrls ?? [],
+          description: validationResult.data.description,
+          priceHistory: {
+            create: {
+              buying: validationResult.data.buyingPrice,
+              selling: validationResult.data.sellingPrice,
+            },
+          },
+        },
+        include: {
+          priceHistory: true,
+          movements: true,
+        },
+      });
+
+      return res.json({
+        success: true,
+        message: "Product created successfully.",
+        data: product,
+      });
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error. Please retry.",
+        data: [],
       });
     }
   }

@@ -1,10 +1,8 @@
+import { Price, Product, ProductMovement, UserRole } from "@prisma/client";
 import { Request, Response, Router } from "express";
-import { ApiResponseType } from "../../../types/api";
-import { Product, ProductMovement, Price, UserRole } from "@prisma/client";
 import prisma from "../../../lib/prisma";
-import NewProductSchema from "../../../validation/product";
-
-type ProductWithPriceHistoryAndMovements = Product & {
+import { ApiResponseType } from "../../../types/api";
+export type ProductWithPriceHistoryAndMovements = Product & {
   priceHistory: Price[];
   movements: ProductMovement[];
 };
@@ -114,82 +112,6 @@ productRouter.delete(
         success: true,
         message: "Product deleted successfully.",
         data: deletedProduct,
-      });
-    } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        success: false,
-        message: "Internal server error. Please retry.",
-        data: [],
-      });
-    }
-  }
-);
-
-productRouter.post(
-  "/",
-  async (
-    req: Request,
-    res: Response<ApiResponseType<ProductWithPriceHistoryAndMovements>>
-  ) => {
-    try {
-      const shopId = req.user.shopId;
-
-      if (!shopId) {
-        return res.status(403).json({
-          success: false,
-          message: "There is no shop associated with your account.",
-          data: [],
-        });
-      }
-
-      // user cnnot create a product if he is not a manager
-
-      const role = req.user.role;
-
-      if (role !== UserRole.MANAGER) {
-        return res.status(403).json({
-          success: false,
-          message: "Only managers can create products.",
-          data: [],
-        });
-      }
-
-      // create a new product
-      const validationResult = NewProductSchema.safeParse(req.body);
-
-      if (!validationResult.success) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid data provided.",
-          data: validationResult.error.issues,
-        });
-      }
-
-      const product = await prisma.product.create({
-        data: {
-          name: validationResult.data.name,
-          shopId: shopId,
-          imageUrls: validationResult.data.imageUrls ?? [],
-          description: validationResult.data.description,
-          priceHistory: {
-            create: {
-              buying: validationResult.data.buyingPrice,
-              selling: validationResult.data.sellingPrice,
-            },
-          },
-        },
-        include: {
-          priceHistory: true,
-          movements: true,
-        },
-      });
-
-      return res.json({
-        success: true,
-        message: "Product created successfully.",
-        data: product,
       });
     } catch (error) {
       console.error(error);

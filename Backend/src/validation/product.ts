@@ -32,6 +32,23 @@ const NewProductSchema = z.object({
     .optional(),
 });
 
+const UpdateProductSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "Please enter a name with at least 2 characters." }),
+  description: z
+    .string()
+    .min(2, { message: "Description should be at least 2 characters long." }),
+  imageUrls: z.array(
+    z.string().regex(utFileUrlRegex, { message: "Invalid image URL." })
+  ),
+  imagesOperation: z.enum(["PUSH", "OVERWRITE"], {
+    message: "Invalid image operation. Must be either PUSH or OVERWRITE.",
+  }),
+});
+
+export type UpdateProductValues = z.infer<typeof UpdateProductSchema>;
+
 export type NewProductValues = z.infer<typeof NewProductSchema>;
 
-export default NewProductSchema;
+export { NewProductSchema, UpdateProductSchema };
