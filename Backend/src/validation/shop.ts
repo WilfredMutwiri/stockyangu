@@ -22,7 +22,13 @@ const NewShopSchema = z.object({
 
   website: z.string().optional(),
 
-  logoUrl: z.string().optional(),
+  logoUrl: z
+    .string()
+    .regex(/^https:\/\/utfs\.io\/(?:a\/([^\/]+)\/|f\/)([^\/]+)$/, {
+      message:
+        "Invalid logo URL. If you are a developer, omit it or provide a valid URL from our upload endpoint.",
+    })
+    .optional(),
 
   category: z.nativeEnum(ShopCategory, {
     message: "Invalid shop category selected.",

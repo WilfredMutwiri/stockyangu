@@ -1,7 +1,7 @@
 import { Response, Router } from "express";
 import shopRouter from "./shop";
 import { ApiResponseType } from "../../types/api";
-import { Shop, UserRole } from "@prisma/client";
+import { NotificationAction, NotificationType, Shop, UserRole } from "@prisma/client";
 import prisma from "../../lib/prisma";
 import { NewShopSchema } from "../../validation/shop";
 
@@ -62,9 +62,9 @@ shopsRouter.get(
   }
 );
 
-shopsRouter.use("/:id", shopRouter);
+shopsRouter.use("/:shopId", shopRouter);
 
-shopsRouter.post("/new", async (req, res: Response<ApiResponseType<Shop>>) => {
+shopsRouter.post("/", async (req, res: Response<ApiResponseType<Shop>>) => {
   try {
     // if the user does not already own a shop, we can create a new shop with him as the manager
     const hasShop = req.user.shopId;
@@ -109,6 +109,14 @@ shopsRouter.post("/new", async (req, res: Response<ApiResponseType<Shop>>) => {
       },
       data: {
         role: UserRole.MANAGER,
+        notifications: {
+          create: {
+            message: `You are now the manager of ${validationResult.data.name}. You can invite workers using their email addresses.`,
+            type: NotificationType.Success,
+            title: "Shop Registered Successfully",
+            action:NotificationAction.VIEW_SHOP
+          },
+        },
       },
     });
 

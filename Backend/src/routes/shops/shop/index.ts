@@ -4,7 +4,7 @@ import { ApiResponseType } from "../../../types/api";
 import productsRouter from "./products";
 import prisma from "../../../lib/prisma";
 
-const shopRouter = Router();
+const shopRouter = Router({ mergeParams: true });
 
 shopRouter.use("/products", productsRouter);
 
@@ -50,7 +50,7 @@ shopRouter.get("/", async (req, res: Response<ApiResponseType<Shop, null>>) => {
     }
 
     if (role === UserRole.SYS_ADMIN) {
-      const shopId = req.query["id"];
+      const shopId = req.query["shopId"];
       if (!shopId || typeof shopId !== "number") {
         return res.status(400).json({
           success: false,
@@ -93,5 +93,15 @@ shopRouter.get("/", async (req, res: Response<ApiResponseType<Shop, null>>) => {
     });
   }
 });
+
+// shopRouter.put(
+//   "/",
+//   async (req, res: Response<ApiResponseType<Shop, null>>) => {}
+// );
+
+// shopRouter.delete(
+//   "/",
+//   async (req, res: Response<ApiResponseType<Shop, null>>) => {}
+// );
 
 export default shopRouter;

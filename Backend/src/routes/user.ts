@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { UserLoginSchema, UserRegistrationSchema } from "../validation/user";
 import { ApiResponseType } from "../types/api";
-import { User } from "@prisma/client";
+import { NotificationAction, User } from "@prisma/client";
 import prisma from "../lib/prisma";
 import { env } from "../lib/env";
 
@@ -57,6 +57,14 @@ userRouter.post(
           email: validationResult.data.email,
           password: hashedPassword,
           name: validationResult.data.name,
+          notifications: {
+            create: {
+              message: "Welcome to our platform! We are glad to have you.",
+              title: "Welcome",
+              action: NotificationAction.NO_ACTION,
+              type: "Info",
+            },
+          },
         },
       });
       // return success message
@@ -158,6 +166,5 @@ userRouter.post("/logout", (_, res: Response<ApiResponseType<null>>) => {
     data: null,
   });
 });
-
 
 export default userRouter;

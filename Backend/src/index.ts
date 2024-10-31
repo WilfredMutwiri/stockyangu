@@ -7,6 +7,7 @@ import router from "./routes";
 import { env } from "./lib/env";
 import rateLimiter from "./middlewares/rate-limit";
 import { ApiResponseType } from "./types/api";
+import paginate from "./middlewares/pagination";
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use("/api", rateLimiter, router);
+app.use("/api", rateLimiter, paginate, router);
 
 app.all("*", function (req, res: Response<ApiResponseType<null, null>>) {
   res.status(404).json({
