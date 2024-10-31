@@ -81,14 +81,49 @@ productRouter.put("/", (_, res) => {
   res.send("Product id put route hit...");
 });
 
-productRouter.delete("/", async (req: Request<{ productId: string }>, res) => {
-  // can delete if he is a  manager of the shop
-  // const role = req.user.role;
-  // const shopId = req.user.shopId;
+productRouter.delete(
+  "/",
+  async (
+    req: Request<{ productId: string }>,
+    res: Response<ApiResponseType<Product>>
+  ) => {
+    // can delete if he is a  manager of the shop
+    try {
+      const role = req.user.role;
+      const shopId = req.user.shopId;
 
-  // const productId = Number(req.params.productId);
+      if (role !== UserRole.MANAGER || !shopId) {
+        return res.status(403).json({
+          success: false,
+          message: "You do not have permission to perform this action.",
+          data: [],
+        });
+      }
 
-  // const deletedProd=1;
-});
+      const productId = Number(req.params.productId);
+
+      const deletedProduct = await prisma.product.delete({
+        where: {
+          id: productId,
+          shopId,
+        },
+      });
+
+      return res.json({
+        success: true,
+        message: "Product deleted successfully.",
+        data: deletedProduct,
+      });
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error. Please retry.",
+        data: [],
+      });
+    }
+  }
+);
 
 export default productRouter;
