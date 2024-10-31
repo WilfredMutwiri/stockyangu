@@ -1,7 +1,7 @@
 import { User, UserRole } from "@prisma/client";
 import { Response, Router } from "express";
-import { ApiResponseType } from "../types/api";
-import prisma from "../lib/prisma";
+import { ApiResponseType } from "../../types/api";
+import prisma from "../../lib/prisma";
 
 const CURRENT_USER_ID_ALIAS = "me";
 

@@ -1,12 +1,10 @@
 import { Shop, UserRole } from "@prisma/client";
 import { Response, Router } from "express";
 import { ApiResponseType } from "../../../types/api";
-import productsRouter from "./products";
 import prisma from "../../../lib/prisma";
 
 const shopRouter = Router({ mergeParams: true });
 
-shopRouter.use("/products", productsRouter);
 
 shopRouter.get("/", async (req, res: Response<ApiResponseType<Shop, null>>) => {
   try {

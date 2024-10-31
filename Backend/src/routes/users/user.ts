@@ -1,11 +1,11 @@
 import { Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { UserLoginSchema, UserRegistrationSchema } from "../validation/user";
-import { ApiResponseType } from "../types/api";
+import { UserLoginSchema, UserRegistrationSchema } from "../../validation/user";
+import { ApiResponseType } from "../../types/api";
 import { NotificationAction, User } from "@prisma/client";
-import prisma from "../lib/prisma";
-import { env } from "../lib/env";
+import prisma from "../../lib/prisma";
+import { env } from "../../lib/env";
 
 const userRouter = Router();
 

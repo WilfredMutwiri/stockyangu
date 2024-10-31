@@ -1,8 +1,8 @@
 import { Response, Router } from "express";
 import productRouter from "./product";
 import { Product, UserRole } from "@prisma/client";
-import { ApiResponseType } from "../../../../types/api";
-import prisma from "../../../../lib/prisma";
+import { ApiResponseType } from "../../types/api";
+import prisma from "../../lib/prisma";
 
 const productsRouter = Router();
 
@@ -22,7 +22,7 @@ productsRouter.get(
         });
       }
 
-      const shopId = req.query["shopId"];
+      const shopId = req.user.shopId;
       if (!shopId || typeof shopId !== "number") {
         return res.status(400).json({
           success: false,
@@ -98,6 +98,6 @@ productsRouter.get(
   }
 );
 
-productsRouter.use("/:id", productRouter);
+productsRouter.use("/:productId", productRouter);
 
 export default productsRouter;
