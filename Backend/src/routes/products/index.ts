@@ -9,33 +9,30 @@ const productsRouter = Router();
 productsRouter.get(
   "/",
   async (req, res: Response<ApiResponseType<Product[], null>>) => {
-    // return all products in this shop
-    // pagination can be added
     try {
       const role = req.user.role;
 
-      if (role === UserRole.SELLER) {
-        return res.status(403).json({
-          success: false,
-          message: "You do not have permission to view the requested data.",
-          data: null,
-        });
-      }
+      // TODO: in docs, specify that if role is sys admin, shopId can be passed as query param to retrieve products of any shop, if not sys_admin, the query param is ignored
 
-      const shopId = req.user.shopId;
-      if (!shopId || typeof shopId !== "number") {
-        return res.status(400).json({
-          success: false,
-          message: "No such shop found.",
-          data: null,
-        });
-      }
+      // if admin, expect a query param shopId, else use the user's shopId
+      const shopIdFromQuery =
+        typeof req.query["shopId"] === "string"
+          ? parseInt(req.query["shopId"])
+          : null;
 
-      // if manager and shopId is not the same as the user's shopId
-      if (role === UserRole.MANAGER && shopId !== req.user.shopId) {
-        return res.status(403).json({
+      const shopId =
+        role === UserRole.SYS_ADMIN
+          ? shopIdFromQuery || req.user.shopId
+          : req.user.shopId;
+
+      if (!shopId) {
+        return res.status(404).json({
           success: false,
-          message: "You do not have permission to view the requested data.",
+          message: `${
+            role === UserRole.SYS_ADMIN
+              ? `No shop specified to retrieve products from.`
+              : "There is no shop in which you are a worker."
+          }`,
           data: null,
         });
       }
@@ -91,7 +88,7 @@ productsRouter.get(
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: "An error occurred.",
+        message: "Internal server error. Please retry.",
         data: null,
       });
     }
