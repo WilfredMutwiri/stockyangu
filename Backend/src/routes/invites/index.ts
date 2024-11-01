@@ -224,6 +224,15 @@ invitesRouter.get(
       where: {
         senderId: req.user.id,
       },
+      include: {
+        recipient: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+          },
+        },
+      },
       take: limit,
       skip: offset,
     });
