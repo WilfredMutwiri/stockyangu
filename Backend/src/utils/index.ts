@@ -1,1 +1,3 @@
-const utFileUrlRegex = /^https:\/\/utfs\.io\/(?:a\/([^\/]+)\/|f\/)([^\/]+)$/
+const utFileUrlRegex = /^https:\/\/utfs\.io\/(?:a\/([^\/]+)\/|f\/)([^\/]+)$/;
+
+export { utFileUrlRegex };

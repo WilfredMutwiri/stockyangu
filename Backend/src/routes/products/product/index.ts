@@ -2,6 +2,7 @@ import { Price, Product, ProductMovement, UserRole } from "@prisma/client";
 import { Request, Response, Router } from "express";
 import prisma, { nullOnNotFound } from "../../../lib/prisma";
 import { ApiResponseType } from "../../../types/api";
+import { PutProductSchema } from "../../../validation/product";
 export type ProductWithPriceHistoryAndMovements = Product & {
   priceHistory: Price[];
   movements: ProductMovement[];
@@ -75,10 +76,62 @@ productRouter.get(
   }
 );
 
-productRouter.put("/", (_, res) => {
-  // this product id is in the req.params.id
-  res.send("Product id put route hit...");
-});
+productRouter.put(
+  "/",
+  async (
+    req: Request<{ productId: string }>,
+    res: Response<ApiResponseType<Product>>
+  ) => {
+    // can update if he is a  manager of the shop
+
+    const role = req.user.role;
+    const shopId = req.user.shopId;
+
+    if (role !== UserRole.MANAGER || !shopId) {
+      return res.status(403).json({
+        success: false,
+        message: "You do not have permission to perform this action.",
+        data: [],
+      });
+    }
+
+    const productId = Number(req.params.productId);
+
+    const validationResult = PutProductSchema.safeParse(req.body);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid data provided.",
+        data: validationResult.error.issues,
+      });
+    }
+
+    const product = await nullOnNotFound(
+      prisma.product.update({
+        where: {
+          id: productId,
+          shopId,
+        },
+        data: validationResult.data,
+      })
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found.",
+        data: [],
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Product updated successfully.",
+      data: product,
+    });
+  }
+);
 
 productRouter.delete(
   "/",

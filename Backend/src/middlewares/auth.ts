@@ -24,6 +24,7 @@ async function auth(
   try {
     decoded = jwt.verify(token, env.JWT_SECRET);
   } catch (err) {
+    console.error(err);
     return res.status(401).json({
       success: false,
       message: "Please login to continue. (ERR:1)",

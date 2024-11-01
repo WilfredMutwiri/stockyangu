@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { utFileUrlRegex } from "../utils";
 
 const NewProductSchema = z.object({
   name: z
@@ -32,7 +33,7 @@ const NewProductSchema = z.object({
     .optional(),
 });
 
-const UpdateProductSchema = z.object({
+const PutProductSchema = z.object({
   name: z
     .string()
     .min(2, { message: "Please enter a name with at least 2 characters." }),
@@ -42,13 +43,13 @@ const UpdateProductSchema = z.object({
   imageUrls: z.array(
     z.string().regex(utFileUrlRegex, { message: "Invalid image URL." })
   ),
-  imagesOperation: z.enum(["PUSH", "OVERWRITE"], {
-    message: "Invalid image operation. Must be either PUSH or OVERWRITE.",
-  }),
 });
 
-export type UpdateProductValues = z.infer<typeof UpdateProductSchema>;
+// make all put product fields optional
+const PatchProductSchema = PutProductSchema.partial();
 
+export type PutProductValues = z.infer<typeof PutProductSchema>;
+export type PatchProductValues = z.infer<typeof PatchProductSchema>;
 export type NewProductValues = z.infer<typeof NewProductSchema>;
 
-export { NewProductSchema, UpdateProductSchema };
+export { NewProductSchema, PutProductSchema, PatchProductSchema };

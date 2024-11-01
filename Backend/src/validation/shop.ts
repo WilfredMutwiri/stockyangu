@@ -1,13 +1,7 @@
 import { ShopCategory } from "@prisma/client";
 import { z } from "zod";
 
-// name     String
-// phone    String
-// email    String
-// website  String?
-// logoUrl  String?
-// category ShopCategory
-
+import { utFileUrlRegex } from "../utils"
 const NewShopSchema = z.object({
   name: z.string().min(1, {
     message: "Please enter the shop name.",
