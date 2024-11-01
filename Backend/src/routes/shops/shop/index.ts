@@ -97,9 +97,6 @@ shopRouter.get("/", async (req, res: Response<ApiResponseType<Shop, null>>) => {
 //   async (req, res: Response<ApiResponseType<Shop, null>>) => {}
 // );
 
-// shopRouter.delete(
-//   "/",
-//   async (req, res: Response<ApiResponseType<Shop, null>>) => {}
-// );
+
 
 export default shopRouter;
