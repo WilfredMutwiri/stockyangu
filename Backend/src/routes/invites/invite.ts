@@ -50,17 +50,14 @@ inviteRouter.delete(
     try {
       const id = Number(req.params.inviteId);
 
-      const invite = await prisma.invite
-        .delete({
+      const invite = await nullOnNotFound(
+        prisma.invite.delete({
           where: {
             id,
             OR: [{ senderId: req.user.id }],
           },
         })
-        .catch((error) => {
-          console.error(error);
-          return null;
-        });
+      );
 
       if (invite) {
         return res.json({
@@ -72,7 +69,8 @@ inviteRouter.delete(
 
       return res.status(404).json({
         success: false,
-        message: "The requested invite was not found on the server.",
+        message:
+          "The requested invite was not found on the server.",
         data: [],
       });
     } catch (error) {
