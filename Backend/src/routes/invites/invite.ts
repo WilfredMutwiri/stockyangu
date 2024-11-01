@@ -23,6 +23,22 @@ inviteRouter.get(
         // check if the user is either the sender or the recipient
         OR: [{ senderId: req.user.id }, { recipientId: req.user.id }],
       },
+      include: {
+        sender: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+          },
+        },
+        recipient: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+          },
+        },
+      },
     });
 
     if (invite) {
@@ -69,8 +85,7 @@ inviteRouter.delete(
 
       return res.status(404).json({
         success: false,
-        message:
-          "The requested invite was not found on the server.",
+        message: "The requested invite was not found on the server.",
         data: [],
       });
     } catch (error) {
