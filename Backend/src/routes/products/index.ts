@@ -7,6 +7,8 @@ import { NewProductSchema } from "../../validation/product";
 
 const productsRouter = Router();
 
+productsRouter.use("/:productId", productRouter);
+
 productsRouter.get(
   "/",
   async (req, res: Response<ApiResponseType<Product[], null>>) => {
@@ -171,7 +173,5 @@ productRouter.post(
     }
   }
 );
-
-productsRouter.use("/:productId", productRouter);
 
 export default productsRouter;

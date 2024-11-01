@@ -1,6 +1,6 @@
 import { Price, Product, ProductMovement, UserRole } from "@prisma/client";
 import { Request, Response, Router } from "express";
-import prisma from "../../../lib/prisma";
+import prisma, { nullOnNotFound } from "../../../lib/prisma";
 import { ApiResponseType } from "../../../types/api";
 export type ProductWithPriceHistoryAndMovements = Product & {
   priceHistory: Price[];
@@ -84,7 +84,7 @@ productRouter.delete(
   "/",
   async (
     req: Request<{ productId: string }>,
-    res: Response<ApiResponseType<Product>>
+    res: Response<ApiResponseType<Product, null>>
   ) => {
     // can delete if he is a  manager of the shop
     try {
@@ -95,18 +95,28 @@ productRouter.delete(
         return res.status(403).json({
           success: false,
           message: "You do not have permission to perform this action.",
-          data: [],
+          data: null,
         });
       }
 
       const productId = Number(req.params.productId);
 
-      const deletedProduct = await prisma.product.delete({
-        where: {
-          id: productId,
-          shopId,
-        },
-      });
+      const deletedProduct = await nullOnNotFound(
+        prisma.product.delete({
+          where: {
+            id: productId,
+            shopId,
+          },
+        })
+      );
+
+      if (!deletedProduct) {
+        return res.status(404).json({
+          success: false,
+          message: "Product not found.",
+          data: null,
+        });
+      }
 
       return res.json({
         success: true,
@@ -119,7 +129,7 @@ productRouter.delete(
       return res.status(500).json({
         success: false,
         message: "Internal server error. Please retry.",
-        data: [],
+        data: null,
       });
     }
   }
