@@ -31,4 +31,8 @@ const NewShopSchema = z.object({
 
 export type NewShopValues = z.infer<typeof NewShopSchema>;
 
-export { NewShopSchema };
+const PatchShopSchema = NewShopSchema.partial();
+
+export type PatchShopValues = z.infer<typeof PatchShopSchema>;
+
+export { NewShopSchema, PatchShopSchema };
