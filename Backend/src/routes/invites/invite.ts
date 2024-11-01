@@ -142,6 +142,7 @@ inviteRouter.patch(
         data: invite,
       });
     } catch (error) {
+      console.error(error);
       return res.status(500).json({
         success: false,
         message: "Internal server error.",
@@ -208,6 +209,7 @@ inviteRouter.patch(
         data: invite,
       });
     } catch (error) {
+      console.error(error);
       return res.status(500).json({
         success: false,
         message: "Internal server error.",

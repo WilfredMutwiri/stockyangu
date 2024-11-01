@@ -7,6 +7,12 @@ const prismaClientSingleton = () => {
         password: true,
       },
     },
+    log: [
+      {
+        emit: "stdout",
+        level: "error",
+      },
+    ],
   });
 };
 
@@ -20,7 +26,9 @@ export default prisma;
 
 if (process.env["NODE_ENV"] !== "production") globalThis.prismaGlobal = prisma;
 
-export async function nullOnNotFound<A>(promise: Promise<A>): Promise<A | null> {
+export async function nullOnNotFound<A>(
+  promise: Promise<A>
+): Promise<A | null> {
   try {
     return await promise;
   } catch (e) {
