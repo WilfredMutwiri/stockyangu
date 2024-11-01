@@ -10,7 +10,6 @@ const NewPriceSchema = z.object({
     .min(0, { message: "Selling price must be a positive number." }),
 });
 
-
 export type NewPriceValues = z.infer<typeof NewPriceSchema>;
 
 export { NewPriceSchema };
