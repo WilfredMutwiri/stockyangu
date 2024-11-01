@@ -2,7 +2,11 @@ import { Price, Product, ProductMovement, UserRole } from "@prisma/client";
 import { Request, Response, Router } from "express";
 import prisma, { nullOnNotFound } from "../../../lib/prisma";
 import { ApiResponseType } from "../../../types/api";
-import { PutProductSchema } from "../../../validation/product";
+import {
+  PatchProductSchema,
+  PutProductSchema,
+} from "../../../validation/product";
+import { removeEmpty } from "../../../utils";
 export type ProductWithPriceHistoryAndMovements = Product & {
   priceHistory: Price[];
   movements: ProductMovement[];
@@ -130,6 +134,76 @@ productRouter.put(
       message: "Product updated successfully.",
       data: product,
     });
+  }
+);
+
+productRouter.patch(
+  "/",
+  async (
+    req: Request<{ productId: string }>,
+    res: Response<ApiResponseType<Product>>
+  ) => {
+    try {
+      // can update if he is a  manager of the shop
+      const role = req.user.role;
+      const shopId = req.user.shopId;
+
+      if (role !== UserRole.MANAGER || !shopId) {
+        return res.status(403).json({
+          success: false,
+          message: "You do not have permission to perform this action.",
+          data: [],
+        });
+      }
+
+      const validationResult = PatchProductSchema.safeParse(req.body);
+
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid data provided.",
+          data: validationResult.error.issues,
+        });
+      }
+
+      const productId = Number(req.params.productId);
+
+      // update product (only the fields that are provided), dont replace arrays But push since it is a patch not a put
+
+      const product = await nullOnNotFound(
+        prisma.product.update({
+          where: {
+            id: productId,
+            shopId,
+          },
+          data: {
+            ...removeEmpty(validationResult.data),
+          },
+        })
+      );
+
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: "Product not found.",
+          data: [],
+        });
+      }
+
+      return res.json({
+        success: true,
+        message: "Product updated successfully.",
+        data: product,
+      });
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error. Please retry.",
+        data: [],
+      });
+    }
   }
 );
 
