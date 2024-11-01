@@ -8,6 +8,7 @@ import {
 } from "../../../validation/product";
 import { removeEmpty } from "../../../utils";
 import priceRouter from "./price";
+import productMovementRouter from "./movement";
 export type ProductWithPriceHistoryAndMovements = Product & {
   priceHistory: Price[];
   movements: ProductMovement[];
@@ -17,7 +18,9 @@ const productRouter = Router({
   mergeParams: true,
 });
 
-productRouter.use("/price", priceRouter)
+productRouter.use("/price", priceRouter);
+
+productRouter.use("/movement", productMovementRouter);
 
 productRouter.get(
   "/",
