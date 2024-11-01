@@ -12,7 +12,9 @@ priceRouter.patch(
     res: Response<Price>
   ) => {
     const productId = Number(req.params.productId);
+
     
+
   }
 );
 

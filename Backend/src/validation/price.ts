@@ -10,9 +10,7 @@ const NewPriceSchema = z.object({
     .min(0, { message: "Selling price must be a positive number." }),
 });
 
-const PatchPriceSchema = NewPriceSchema.partial();
 
 export type NewPriceValues = z.infer<typeof NewPriceSchema>;
-export type PatchPriceValues = z.infer<typeof PatchPriceSchema>;
 
-export { NewPriceSchema, PatchPriceSchema };
+export { NewPriceSchema };
