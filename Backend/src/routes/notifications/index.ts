@@ -2,8 +2,11 @@ import { Response, Router } from "express";
 import prisma from "../../lib/prisma";
 import { ApiResponseType } from "../../types/api";
 import { Notification } from "@prisma/client";
+import notificationRouter from "./notification";
 
 const notificationsRouter = Router();
+
+notificationsRouter.use("/:notificationId", notificationRouter);
 
 notificationsRouter.get(
   "/",
