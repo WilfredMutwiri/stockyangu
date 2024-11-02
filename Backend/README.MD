@@ -19,9 +19,7 @@
     {
       "success": true,
       "message": "string",
-      "data": {
-        "token": "string"
-      }
+      "data": null
     }
     ```
 
