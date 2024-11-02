@@ -38,7 +38,7 @@ function getPaginationMeta({
 
   const currentUrl = new URL(url.toString());
   currentUrl.searchParams.set("page", String(page));
-  currentUrl.searchParams.set("limit", String(limit));
+  currentUrl.searchParams.set("limit", String(returnedCount));
 
   return {
     current_page: page,

@@ -18,6 +18,14 @@ notificationRouter.get(
     try {
       const notificationId = Number(req.params.notificationId);
 
+      if (isNaN(notificationId)) {
+        return res.status(404).json({
+          success: false,
+          message: "The notification requested was not found.",
+          data: null,
+        });
+      }
+
       // get notification
       const notification = await prisma.notification.findUnique({
         where: {
