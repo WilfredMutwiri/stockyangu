@@ -22,7 +22,7 @@ priceRouter.post(
   ) => {
     try {
       const productId = Number(req.params.productId);
-      const { limit, offset, page } = req.pagination;
+      const { limit, offset } = req.pagination;
 
       const validationResult = NewPriceSchema.safeParse(req.body);
 
@@ -108,10 +108,7 @@ priceRouter.post(
           current_price: newPrice,
         },
         pagination: getPaginationMeta({
-          originalUrl: req.originalUrl,
-          limit,
-          offset,
-          page,
+          req,
           total: count,
           returnedCount: history.length,
         }),
@@ -144,7 +141,7 @@ priceRouter.get(
 
       const productId = Number(req.params.productId);
 
-      const { limit, offset, page } = req.pagination;
+      const { limit, offset } = req.pagination;
 
       if (!req.user.shopId) {
         return res.status(403).json({
@@ -188,10 +185,7 @@ priceRouter.get(
           current_price: currentPrice || null,
         },
         pagination: getPaginationMeta({
-          originalUrl: req.originalUrl,
-          limit,
-          offset,
-          page,
+         req,
           total: product.priceHistory.length,
           returnedCount: product.priceHistory.length,
         }),

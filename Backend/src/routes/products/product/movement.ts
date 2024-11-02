@@ -16,7 +16,7 @@ productMovementRouter.get(
     res: Response<ApiResponseType<ProductMovement[]>>
   ) => {
     try {
-      const { limit, offset, page } = req.pagination;
+      const { limit, offset } = req.pagination;
       const productId = Number(req.params.productId);
 
       if (!req.user.shopId) {
@@ -66,10 +66,7 @@ productMovementRouter.get(
         message: "Succeeded.",
         data: productMovements,
         pagination: getPaginationMeta({
-          originalUrl: req.originalUrl,
-          limit,
-          offset,
-          page,
+          req,
           total: count,
           returnedCount: productMovements.length,
         }),

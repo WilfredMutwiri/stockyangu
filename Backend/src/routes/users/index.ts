@@ -39,7 +39,6 @@ usersRouter.get(
       });
     }
 
-
     // if the user is a manager, return all users in the shop
     if (role === UserRole.MANAGER) {
       const usersPromise = prisma.user.findMany({
@@ -62,10 +61,7 @@ usersRouter.get(
         message: "Succeeded.",
         data: users,
         pagination: getPaginationMeta({
-          originalUrl: req.originalUrl,
-          limit,
-          offset,
-          page,
+          req,
           total: count,
           returnedCount: users.length,
         }),
@@ -87,10 +83,7 @@ usersRouter.get(
         message: "Succeeded.",
         data: users,
         pagination: getPaginationMeta({
-          originalUrl: req.originalUrl,
-          limit,
-          offset,
-          page,
+          req,
           total: count,
           returnedCount: users.length,
         }),

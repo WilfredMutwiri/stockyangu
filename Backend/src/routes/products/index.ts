@@ -42,7 +42,7 @@ productsRouter.get(
       }
 
       // if sys admin or manager with the same shopId
-      const { limit, offset, page } = req.pagination;
+      const { limit, offset } = req.pagination;
 
       const productsPromise = await prisma.product.findMany({
         where: {
@@ -68,10 +68,7 @@ productsRouter.get(
         message: "Succeeded.",
         data: products,
         pagination: getPaginationMeta({
-          originalUrl: req.originalUrl,
-          limit,
-          offset,
-          page,
+          req,
           total: count,
           returnedCount: products.length,
         }),

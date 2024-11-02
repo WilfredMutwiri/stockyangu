@@ -1,23 +1,22 @@
+import { Request } from "express";
 import { PaginationMeta } from "../types/api";
 function getPaginationMeta({
-  originalUrl,
-  limit,
-  offset,
-  page,
   total,
   returnedCount,
+  req,
 }: {
-  originalUrl: string;
-  limit: number;
-  offset: number;
-  page: number;
+  req: Request;
   total: number;
   returnedCount: number;
 }): PaginationMeta {
+  const { limit, offset, page } = req.pagination;
+  const originalUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
+
   const pagesCount = limit > 0 ? Math.ceil(total / limit) : 1;
   const hasNext = offset + limit < total;
   const hasPrev = offset > 0;
 
+  console.log(originalUrl, " in pagination meta function");
   const url = new URL(originalUrl);
 
   let nextUrl: string | null = null;
@@ -37,6 +36,10 @@ function getPaginationMeta({
     prevUrl = prev.toString();
   }
 
+  const currentUrl = new URL(url.toString());
+  currentUrl.searchParams.set("page", String(page));
+  currentUrl.searchParams.set("limit", String(limit));
+
   return {
     current_page: page,
     has_next: hasNext,
@@ -47,7 +50,7 @@ function getPaginationMeta({
     links: {
       next: nextUrl,
       prev: prevUrl,
-      self: url.toString(), // Keeps original pagination parameters intact
+      self: currentUrl.toString(), // Keeps original pagination parameters intact
     },
   };
 }

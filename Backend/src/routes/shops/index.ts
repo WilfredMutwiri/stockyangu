@@ -28,7 +28,7 @@ shopsRouter.get(
     }
 
     // fetch all shops paginated
-    const { limit, offset, page } = req.pagination;
+    const { limit, offset} = req.pagination;
 
     const shopsPromise = prisma.shop.findMany({
       take: limit,
@@ -44,10 +44,7 @@ shopsRouter.get(
       message: "Succeeded.",
       data: shops,
       pagination: getPaginationMeta({
-        originalUrl: req.originalUrl,
-        limit,
-        offset,
-        page,
+        req,
         total: count,
         returnedCount: shops.length,
       }),

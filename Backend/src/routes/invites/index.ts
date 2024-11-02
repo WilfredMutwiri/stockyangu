@@ -169,7 +169,7 @@ invitesRouter.post(
 invitesRouter.get(
   "/received",
   async (req, res: Response<ApiResponseType<Invite[], null>>) => {
-    const { limit, offset, page } = req.pagination;
+    const { limit, offset } = req.pagination;
     const invitesPromise = prisma.invite.findMany({
       where: {
         recipientId: req.user.id,
@@ -200,10 +200,7 @@ invitesRouter.get(
       message: "Succeeded.",
       data: invites,
       pagination: getPaginationMeta({
-        originalUrl: req.originalUrl,
-        limit,
-        offset,
-        page,
+        req,
         total: count,
         returnedCount: invites.length,
       }),
@@ -215,7 +212,7 @@ invitesRouter.get(
   "/sent",
 
   async (req, res: Response<ApiResponseType<Invite[], null>>) => {
-    const { limit, offset, page } = req.pagination;
+    const { limit, offset } = req.pagination;
 
     const invitesPromise = prisma.invite.findMany({
       where: {
@@ -248,10 +245,7 @@ invitesRouter.get(
       message: "Succeeded.",
       data: invites,
       pagination: getPaginationMeta({
-        originalUrl: req.originalUrl,
-        limit,
-        offset,
-        page,
+        req,
         total: count,
         returnedCount: invites.length,
       }),
