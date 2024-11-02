@@ -7,9 +7,9 @@ const rateLimitExceededResponse: ApiResponseType<null> = {
   data: [],
 };
 
-const rateLimiter = rateLimit({
+const postAuthRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  limit: 100, // Limit each to 100 requests per `window` (here, per 15 minutes).
   standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
   message: rateLimitExceededResponse,
@@ -26,4 +26,12 @@ const rateLimiter = rateLimit({
   },
 });
 
-export default rateLimiter;
+const preAuthRateLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  limit: 500,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: rateLimitExceededResponse,
+});
+
+export { postAuthRateLimiter, preAuthRateLimiter };
