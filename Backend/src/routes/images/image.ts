@@ -9,7 +9,7 @@ const imageRouter = Router({
 imageRouter.delete("/", async (req, res: Response<ApiResponseType<null>>) => {
   try {
     // return not implemented, until we have a use case
-    // it is a security risk to allow deleting files since user can delete files of other users
+    // it is a security risk to allow deleting files since user can delete files of other users untill we mitigate that
     return res.status(501).json({
       success: false,
       message: "Not implemented",
