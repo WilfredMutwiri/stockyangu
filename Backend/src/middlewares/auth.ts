@@ -40,13 +40,18 @@ async function auth(
     password: z.string(),
     role: z.nativeEnum(UserRole),
     shopId: z.number().nullable(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
+    // DATES ARE IN ISO FORMAT SO COERCE TO DATE
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
   });
 
   const validationResult = UserSchema.safeParse(decoded);
 
   if (!validationResult.success) {
+    console.log(
+      `could not validate user In auth middleware: `,
+      JSON.stringify(validationResult.error)
+    );
     return res.status(401).json({
       success: false,
       message: "Please login to continue. (ERR:2)",
