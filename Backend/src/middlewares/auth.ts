@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { env } from "../lib/env";
-import prisma from "../lib/prisma";
 import { ApiResponseType } from "../types/api";
+import { z } from "zod";
+import { UserRole } from "@prisma/client";
 
 async function auth(
   req: Request,
@@ -32,7 +33,20 @@ async function auth(
     });
   }
 
-  if (typeof decoded === "string" || !("id" in decoded)) {
+  const UserSchema = z.object({
+    id: z.string(),
+    email: z.string(),
+    name: z.string(),
+    password: z.string(),
+    role: z.nativeEnum(UserRole),
+    shopId: z.number().nullable(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+  });
+
+  const validationResult = UserSchema.safeParse(decoded);
+
+  if (!validationResult.success) {
     return res.status(401).json({
       success: false,
       message: "Please login to continue. (ERR:2)",
@@ -40,21 +54,7 @@ async function auth(
     });
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: decoded["id"],
-    },
-  });
-
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      message: "Please login to continue. (ERR:3)",
-      data: null,
-    });
-  }
-
-  req.user = user;
+  req.user = validationResult.data;
   return next();
 }
 

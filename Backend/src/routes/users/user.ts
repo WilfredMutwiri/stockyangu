@@ -1,11 +1,10 @@
-import { Response, Router } from "express";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { UserLoginSchema, UserRegistrationSchema } from "../../validation/user";
-import { ApiResponseType } from "../../types/api";
 import { NotificationAction, User } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { Response, Router } from "express";
+import { revalidateJwtToken } from "../../lib/auth";
 import prisma from "../../lib/prisma";
-import { env } from "../../lib/env";
+import { ApiResponseType } from "../../types/api";
+import { UserLoginSchema, UserRegistrationSchema } from "../../validation/user";
 
 const userRouter = Router();
 
@@ -85,77 +84,59 @@ userRouter.post(
   }
 );
 
-userRouter.post(
-  "/login",
-  async (
-    req,
-    res: Response<
-      ApiResponseType<{
-        token: string;
-      }>
-    >
-  ) => {
-    const validationResult = UserLoginSchema.safeParse(req.body);
-    if (!validationResult.success) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid login attempt.",
-        data: validationResult.error.issues,
-      });
-    }
-
-    const { email, password } = validationResult.data;
-    // get user
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-      omit: {
-        password: false,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Invalid login attempt.",
-        data: [],
-      });
-    }
-    // check if correct password
-    const passwordMatch = await bcrypt.compare(password, user.password);
-
-    console.log("passwordMatch", passwordMatch);
-
-    if (!passwordMatch) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid login attempt.",
-        data: [],
-      });
-    }
-
-    // generate token
-    const token = jwt.sign({ id: user.id }, env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
-
-    res.cookie("token", token, {
-      // httpOnly: true, // Prevent JavaScript access to the cookie
-      secure: true, // Use Secure flag (only send over HTTPS)
-      sameSite: "none", // Prevent CSRF attacks
-      maxAge: 24 * 60 * 60 * 1000, // time in milliseconds
-    });
-
-    return res.json({
-      success: true,
-      message: "You have been logged in successfully.",
-      data: {
-        token,
-      },
+userRouter.post("/login", async (req, res: Response<ApiResponseType<null>>) => {
+  const validationResult = UserLoginSchema.safeParse(req.body);
+  if (!validationResult.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid login attempt.",
+      data: validationResult.error.issues,
     });
   }
-);
+
+  const { email, password } = validationResult.data;
+  // get user
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+    omit: {
+      password: false,
+    },
+  });
+
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "Invalid login attempt.",
+      data: [],
+    });
+  }
+  // check if correct password
+  const passwordMatch = await bcrypt.compare(password, user.password);
+
+  console.log("passwordMatch", passwordMatch);
+
+  if (!passwordMatch) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid login attempt.",
+      data: [],
+    });
+  }
+
+  // const token =
+  revalidateJwtToken({
+    res,
+    user,
+  });
+
+  return res.json({
+    success: true,
+    message: "You have been logged in successfully.",
+    data: null,
+  });
+});
 
 // this is why we use post instead of get: https://stackoverflow.com/questions/3521290/logging-out-get-or-post
 userRouter.post("/logout", (_, res: Response<ApiResponseType<null>>) => {
