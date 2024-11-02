@@ -4,7 +4,13 @@ import jwt from "jsonwebtoken";
 import { env } from "./env";
 import { User } from "@prisma/client";
 
-function revalidateJwtToken({ res, user }: { res: Response; user: User }) {
+function revalidateJwtToken({
+  res,
+  user,
+}: {
+  res: Response;
+  user: Omit<User, "password">;
+}) {
   // generate token
   const token = jwt.sign(user, env.JWT_SECRET, {
     expiresIn: "24h",

@@ -10,6 +10,7 @@ import {
 import prisma from "../../lib/prisma";
 import { NewShopSchema } from "../../validation/shop";
 import { getPaginationMeta } from "../../lib/pagination";
+import { revalidateJwtToken } from "../../lib/auth";
 
 const shopsRouter = Router();
 
@@ -28,7 +29,7 @@ shopsRouter.get(
     }
 
     // fetch all shops paginated
-    const { limit, offset} = req.pagination;
+    const { limit, offset } = req.pagination;
 
     const shopsPromise = prisma.shop.findMany({
       take: limit,
@@ -111,6 +112,16 @@ shopsRouter.post("/", async (req, res: Response<ApiResponseType<Shop>>) => {
     });
 
     const [shop, _] = await Promise.all([shopPromise, updatedUserPromise]);
+
+    // since the user's role has changed, we need to revalidate the token
+    revalidateJwtToken({
+      res,
+      user: {
+        ...req.user,
+        shopId: shop.id,
+        role: UserRole.MANAGER,
+      },
+    });
 
     return res.json({
       success: true,
