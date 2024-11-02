@@ -1,9 +1,15 @@
 import { Response, Router } from "express";
 import shopRouter from "./shop";
 import { ApiResponseType } from "../../types/api";
-import { NotificationAction, NotificationType, Shop, UserRole } from "@prisma/client";
+import {
+  NotificationAction,
+  NotificationType,
+  Shop,
+  UserRole,
+} from "@prisma/client";
 import prisma from "../../lib/prisma";
 import { NewShopSchema } from "../../validation/shop";
+import { getPaginationMeta } from "../../lib/pagination";
 
 const shopsRouter = Router();
 
@@ -33,31 +39,18 @@ shopsRouter.get(
 
     const [shops, count] = await Promise.all([shopsPromise, countPromise]);
 
-    const urlWithoutQuery = req.originalUrl.split("?")[0];
-
     return res.json({
       success: true,
       message: "Succeeded.",
       data: shops,
-      pagination: {
-        current_page: page,
-        has_next: offset + limit < count,
-        has_prev: offset > 0,
-        available_count: count,
-        returned_count: shops.length,
-        pages_count: Math.ceil(count / limit),
-        links: {
-          next:
-            offset + limit < count
-              ? `${urlWithoutQuery}?page=${page + 1}&limit=${limit}`
-              : null,
-          prev:
-            offset > 0
-              ? `${urlWithoutQuery}?page=${page - 1}&limit=${limit}`
-              : null,
-          self: req.originalUrl,
-        },
-      },
+      pagination: getPaginationMeta({
+        originalUrl: req.originalUrl,
+        limit,
+        offset,
+        page,
+        total: count,
+        returnedCount: shops.length,
+      }),
     });
   }
 );
@@ -114,7 +107,7 @@ shopsRouter.post("/", async (req, res: Response<ApiResponseType<Shop>>) => {
             message: `You are now the manager of ${validationResult.data.name}. You can invite workers using their email addresses.`,
             type: NotificationType.Success,
             title: "Shop Registered Successfully",
-            action:NotificationAction.VIEW_SHOP
+            action: NotificationAction.VIEW_SHOP,
           },
         },
       },

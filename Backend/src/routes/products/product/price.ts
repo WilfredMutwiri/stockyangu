@@ -3,6 +3,7 @@ import { Request, Response, Router } from "express";
 import { NewPriceSchema } from "../../../validation/price";
 import { ApiResponseType } from "../../../types/api";
 import prisma from "../../../lib/prisma";
+import { getPaginationMeta } from "../../../lib/pagination";
 
 const priceRouter = Router({ mergeParams: true });
 
@@ -21,7 +22,7 @@ priceRouter.post(
   ) => {
     try {
       const productId = Number(req.params.productId);
-      const { limit, offset } = req.pagination;
+      const { limit, offset, page } = req.pagination;
 
       const validationResult = NewPriceSchema.safeParse(req.body);
 
@@ -43,7 +44,7 @@ priceRouter.post(
       }
 
       // update the product by pushing a new price and add end date to the previous prices which doesn't have end date
-      const updatedProduct = await prisma.product.update({
+      const updatedProductPromise = prisma.product.update({
         where: {
           // Note:Must add shopId to the where clause to prevent writing to other shops' products
           shopId: req.user.shopId,
@@ -76,6 +77,16 @@ priceRouter.post(
           },
         },
       });
+      const countPromise = prisma.price.count({
+        where: {
+          productId,
+        },
+      });
+
+      const [updatedProduct, count] = await Promise.all([
+        updatedProductPromise,
+        countPromise,
+      ]);
 
       const newPrice = updatedProduct.priceHistory.pop();
 
@@ -96,6 +107,14 @@ priceRouter.post(
           history: updatedProduct.priceHistory,
           current_price: newPrice,
         },
+        pagination: getPaginationMeta({
+          originalUrl: req.originalUrl,
+          limit,
+          offset,
+          page,
+          total: count,
+          returnedCount: history.length,
+        }),
       });
     } catch (error) {
       console.error(error);
@@ -122,11 +141,10 @@ priceRouter.get(
     >
   ) => {
     try {
-      // TODO: return the pagination details in the response
 
       const productId = Number(req.params.productId);
 
-      const { limit, offset } = req.pagination;
+      const { limit, offset, page } = req.pagination;
 
       if (!req.user.shopId) {
         return res.status(403).json({
@@ -169,6 +187,14 @@ priceRouter.get(
           history: product.priceHistory,
           current_price: currentPrice || null,
         },
+        pagination: getPaginationMeta({
+          originalUrl: req.originalUrl,
+          limit,
+          offset,
+          page,
+          total: product.priceHistory.length,
+          returnedCount: product.priceHistory.length,
+        }),
       });
     } catch (error) {
       console.error(error);

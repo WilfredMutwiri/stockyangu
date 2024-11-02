@@ -3,6 +3,7 @@ import prisma from "../../lib/prisma";
 import { ApiResponseType } from "../../types/api";
 import { Notification } from "@prisma/client";
 import notificationRouter from "./notification";
+import { getPaginationMeta } from "../../lib/pagination";
 
 const notificationsRouter = Router();
 
@@ -31,31 +32,18 @@ notificationsRouter.get(
       countPromise,
     ]);
 
-    const urlWithoutQuery = req.originalUrl.split("?")[0];
-
     return res.json({
       success: true,
       message: "Succeeded.",
       data: notifications,
-      pagination: {
-        current_page: page,
-        has_next: offset + limit < count,
-        has_prev: offset > 0,
-        available_count: count,
-        returned_count: notifications.length,
-        pages_count: Math.ceil(count / limit),
-        links: {
-          next:
-            offset + limit < count
-              ? `${urlWithoutQuery}?page=${page + 1}&limit=${limit}`
-              : null,
-          prev:
-            offset > 0
-              ? `${urlWithoutQuery}?page=${page - 1}&limit=${limit}`
-              : null,
-          self: req.originalUrl,
-        },
-      },
+      pagination: getPaginationMeta({
+        originalUrl: req.originalUrl,
+        limit,
+        offset,
+        page,
+        total: count,
+        returnedCount: notifications.length,
+      }),
     });
   }
 );

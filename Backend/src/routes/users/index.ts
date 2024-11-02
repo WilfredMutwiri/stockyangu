@@ -2,6 +2,7 @@ import { User, UserRole } from "@prisma/client";
 import { Response, Router } from "express";
 import { ApiResponseType } from "../../types/api";
 import prisma from "../../lib/prisma";
+import { getPaginationMeta } from "../../lib/pagination";
 
 const CURRENT_USER_ID_ALIAS = "me";
 
@@ -38,7 +39,6 @@ usersRouter.get(
       });
     }
 
-    const urlWithoutQuery = req.originalUrl.split("?")[0];
 
     // if the user is a manager, return all users in the shop
     if (role === UserRole.MANAGER) {
@@ -61,25 +61,14 @@ usersRouter.get(
         success: true,
         message: "Succeeded.",
         data: users,
-        pagination: {
-          current_page: page,
-          has_next: offset + limit < count,
-          has_prev: offset > 0,
-          available_count: count,
-          returned_count: users.length,
-          pages_count: Math.ceil(count / limit),
-          links: {
-            next:
-              offset + limit < count
-                ? `${urlWithoutQuery}?page=${page + 1}&limit=${limit}`
-                : null,
-            prev:
-              offset > 0
-                ? `${urlWithoutQuery}?page=${page - 1}&limit=${limit}`
-                : null,
-            self: req.originalUrl,
-          },
-        },
+        pagination: getPaginationMeta({
+          originalUrl: req.originalUrl,
+          limit,
+          offset,
+          page,
+          total: count,
+          returnedCount: users.length,
+        }),
       });
     }
 
@@ -97,25 +86,14 @@ usersRouter.get(
         success: true,
         message: "Succeeded.",
         data: users,
-        pagination: {
-          current_page: page,
-          has_next: offset + limit < count,
-          has_prev: offset > 0,
-          available_count: count,
-          returned_count: users.length,
-          pages_count: Math.ceil(count / limit),
-          links: {
-            next:
-              offset + limit < count
-                ? `${urlWithoutQuery}?page=${page + 1}&limit=${limit}`
-                : null,
-            prev:
-              offset > 0
-                ? `${urlWithoutQuery}?page=${page - 1}&limit=${limit}`
-                : null,
-            self: req.originalUrl,
-          },
-        },
+        pagination: getPaginationMeta({
+          originalUrl: req.originalUrl,
+          limit,
+          offset,
+          page,
+          total: count,
+          returnedCount: users.length,
+        }),
       });
     }
 

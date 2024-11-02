@@ -4,6 +4,7 @@ import prisma from "../../lib/prisma";
 import { ApiResponseType } from "../../types/api";
 import productRouter, { ProductWithPriceHistoryAndMovements } from "./product";
 import { NewProductSchema } from "../../validation/product";
+import { getPaginationMeta } from "../../lib/pagination";
 
 const productsRouter = Router();
 
@@ -62,31 +63,18 @@ productsRouter.get(
         countPromise,
       ]);
 
-      const urlWithoutQuery = req.originalUrl.split("?")[0];
-
       return res.json({
         success: true,
         message: "Succeeded.",
         data: products,
-        pagination: {
-          current_page: page,
-          has_next: offset + limit < count,
-          has_prev: offset > 0,
-          available_count: count,
-          returned_count: products.length,
-          pages_count: Math.ceil(count / limit),
-          links: {
-            next:
-              offset + limit < count
-                ? `${urlWithoutQuery}?page=${page + 1}&limit=${limit}`
-                : null,
-            prev:
-              offset > 0
-                ? `${urlWithoutQuery}?page=${page - 1}&limit=${limit}`
-                : null,
-            self: req.originalUrl,
-          },
-        },
+        pagination: getPaginationMeta({
+          originalUrl: req.originalUrl,
+          limit,
+          offset,
+          page,
+          total: count,
+          returnedCount: products.length,
+        }),
       });
     } catch (error) {
       return res.status(500).json({
