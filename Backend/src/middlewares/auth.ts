@@ -37,7 +37,6 @@ async function auth(
     id: z.string(),
     email: z.string(),
     name: z.string(),
-    password: z.string(),
     role: z.nativeEnum(UserRole),
     shopId: z.number().nullable(),
     // DATES ARE IN ISO FORMAT SO COERCE TO DATE

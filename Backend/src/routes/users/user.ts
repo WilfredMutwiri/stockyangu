@@ -125,10 +125,12 @@ userRouter.post("/login", async (req, res: Response<ApiResponseType<null>>) => {
     });
   }
 
+  const { password: _, ...userWithoutPassword } = user;
+
   // const token =
   revalidateJwtToken({
     res,
-    user,
+    user: userWithoutPassword,
   });
 
   return res.json({
