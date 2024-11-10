@@ -26,12 +26,5 @@ const postAuthRateLimiter = rateLimit({
   },
 });
 
-const preAuthRateLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  limit: 500,
-  standardHeaders: "draft-7",
-  legacyHeaders: false,
-  message: rateLimitExceededResponse,
-});
 
-export { postAuthRateLimiter, preAuthRateLimiter };
+export { postAuthRateLimiter };

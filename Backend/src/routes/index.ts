@@ -7,10 +7,8 @@ import imagesRouter from "./images";
 import notificationsRouter from "./notifications";
 import invitesRouter from "./invites";
 import productsRouter from "./products";
-import {
-  postAuthRateLimiter,
-  preAuthRateLimiter,
-} from "../middlewares/rate-limit";
+import { postAuthRateLimiter } from "../middlewares/rate-limit";
+import categoriesRouter from "./categories";
 const router = Router();
 
 const routes: {
@@ -26,13 +24,17 @@ const routes: {
   { path: "/notifications", router: notificationsRouter },
   { path: "/invites", router: invitesRouter },
   { path: "/products", router: productsRouter },
+  {
+    path: "/available-categories",
+    router: categoriesRouter,
+    authenticate: false,
+  },
 ];
 
 // Loop through the routes and apply middlewares and routers
 routes.forEach(
   ({ path, authenticate = true, middlewares = [], router: routeHandler }) => {
     const appliedMiddlewares = [
-      preAuthRateLimiter, // Apply rateLimiter before auth and any other middlewares
       ...(authenticate ? [auth] : []), // Apply auth if authenticate is true
       ...middlewares, // Additional middlewares, if any
       postAuthRateLimiter, // Apply rateLimiter after auth and any other middlewares
